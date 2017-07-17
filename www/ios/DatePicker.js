@@ -33,7 +33,7 @@ DatePicker.prototype.ANDROID_THEMES = {
 /**
  * show - true to show the ad, false to hide the ad
  */
-DatePicker.prototype.show = function(options, cb) {
+DatePicker.prototype.show = function(options, cb, errCb) {
     var padDate = function(date) {
       if (date.length == 1) {
         return ("0" + date);
@@ -79,6 +79,7 @@ DatePicker.prototype.show = function(options, cb) {
 
     var defaults = {
         mode: 'date',
+        clearText: '',
         date: new Date(),
         allowOldDates: true,
         allowFutureDates: true,
@@ -101,6 +102,7 @@ DatePicker.prototype.show = function(options, cb) {
             defaults[key] = options[key];
     }
     this._callback = cb;
+    this._errCallback = errCb;
 
     exec(null,
       null,
@@ -117,8 +119,13 @@ DatePicker.prototype._dateSelected = function(date) {
 };
 
 DatePicker.prototype._dateSelectionCanceled = function() {
-    if (this._callback)
-        this._callback();
+    if (this._errCallback)
+        this._errCallback("cancel");
+};
+
+DatePicker.prototype._dateSelectionCleared = function() {
+    if (this._errCallback)
+        this._errCallback("clear");
 };
 
 DatePicker.prototype._UIPopoverArrowDirection = {
