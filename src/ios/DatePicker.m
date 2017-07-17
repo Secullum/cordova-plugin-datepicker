@@ -103,7 +103,7 @@
 
     [btnClear setTitle:clearText forState:UIControlStateNormal];
     [btnClear setFrame:CGRectMake(width / 2.0 - 80.0, 11.4, 160.0, 40.0)];
-    [btnClear.titleLabel setFont[UIFont systemFontOfSize:16]];
+    [btnClear.titleLabel setFont:[UIFont systemFontOfSize:16]];
     [btnClear addTarget:self action:@selector(clearAction:) forControlEvents:UIControlEventTouchUpInside];
 
     [self.datePickerComponentsContainer addSubview:btnClear];
