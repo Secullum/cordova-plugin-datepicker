@@ -44,6 +44,7 @@ public class DatePickerPlugin extends CordovaPlugin {
 	private static final String ACTION_TIME = "time";
 	private static final String RESULT_ERROR = "error";
 	private static final String RESULT_CANCEL = "cancel";
+	private static final String RESULT_CLEAR = "clear";
 	private final String pluginName = "DatePickerPlugin";
 	
 	// On some devices, onDateSet or onTimeSet are being called twice
@@ -121,6 +122,14 @@ public class DatePickerPlugin extends CordovaPlugin {
 							}
 						});
 			        }
+					if (!jsonDate.clearText.isEmpty()){
+						timeDialog.setButton(DialogInterface.BUTTON_NEUTRAL, jsonDate.clearText, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								callbackContext.error(RESULT_CLEAR);
+							}
+						});
+					}
 					String labelCancel = jsonDate.cancelText.isEmpty() ? currentCtx.getString(android.R.string.cancel) : jsonDate.cancelText; 
 					timeDialog.setButton(DialogInterface.BUTTON_NEGATIVE, labelCancel, new DialogInterface.OnClickListener() {
 						@Override
@@ -128,7 +137,7 @@ public class DatePickerPlugin extends CordovaPlugin {
 							canceled = true;
 							callbackContext.error(RESULT_CANCEL);
 						}
-					});
+					});					
 					String labelOk = jsonDate.okText.isEmpty() ? currentCtx.getString(android.R.string.ok) : jsonDate.okText;
 					timeDialog.setButton(DialogInterface.BUTTON_POSITIVE, labelOk, timeDialog);
 				}
@@ -178,6 +187,14 @@ public class DatePickerPlugin extends CordovaPlugin {
                 }
             });
         }
+		if (!jsonDate.clearText.isEmpty()){
+			dateDialog.setButton(DialogInterface.BUTTON_NEUTRAL, jsonDate.clearText, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					callbackContext.error(RESULT_CLEAR);
+				}
+			});
+		}
 		String labelCancel = jsonDate.cancelText.isEmpty() ? currentCtx.getString(android.R.string.cancel) : jsonDate.cancelText; 
 		dateDialog.setButton(DialogInterface.BUTTON_NEGATIVE, labelCancel, new DialogInterface.OnClickListener() {
             @Override
@@ -185,7 +202,7 @@ public class DatePickerPlugin extends CordovaPlugin {
 				canceled = true;
 				callbackContext.error(RESULT_CANCEL);
             }
-        });
+        });		
 		String labelOk = jsonDate.okText.isEmpty() ? currentCtx.getString(android.R.string.ok) : jsonDate.okText;
 		dateDialog.setButton(DialogInterface.BUTTON_POSITIVE, labelOk, new DialogInterface.OnClickListener() {
             @Override
@@ -338,6 +355,7 @@ public class DatePickerPlugin extends CordovaPlugin {
 		private String titleText = "";
 		private String okText = "";
 		private String cancelText = "";
+		private String clearText = "";
 		private String todayText = "";
 		private String nowText = "";
 		private long minDate = 0;
@@ -374,6 +392,8 @@ public class DatePickerPlugin extends CordovaPlugin {
 				okText = isNotEmpty(obj, "okText") ? obj.getString("okText") : "";
 				cancelText = isNotEmpty(obj, "cancelText") ? obj
 						.getString("cancelText") : "";
+				clearText = isNotEmpty(obj, "clearText") ? obj.getString("clearText")
+						: "";
 				todayText = isNotEmpty(obj, "todayText") ? obj
 						.getString("todayText") : "";
 				nowText = isNotEmpty(obj, "nowText") ? obj.getString("nowText")
