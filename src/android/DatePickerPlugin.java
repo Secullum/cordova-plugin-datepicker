@@ -99,11 +99,19 @@ public class DatePickerPlugin extends CordovaPlugin {
 				final TimePickerDialog timeDialog = new TimePickerDialog(currentCtx, theme, timeSetListener, jsonDate.hour,
 						jsonDate.minutes, jsonDate.is24Hour) {
 					public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-						view.clearFocus();
-
 						timePicker = view;
 						timePickerHour = hourOfDay;
 						timePickerMinute = minute;
+					}
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (timePicker != null) {
+							if (which == BUTTON_POSITIVE) {
+								timePicker.clearFocus();
+								timeSetListener.onTimeSet(timePicker, timePicker.getHour(), timePicker.getMinute());
+							}
+						}
 					}
 				};
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -258,7 +266,6 @@ public class DatePickerPlugin extends CordovaPlugin {
 			pickerView.init(jsonDate.year, jsonDate.month, jsonDate.day, new OnDateChangedListener() {
                 @Override
 				public void onDateChanged(DatePicker view, int year, int month, int day) {
-      				view.clearFocus();
                 	if(jsonDate.maxDate > 0 && jsonDate.maxDate > jsonDate.minDate) {
 	                	if(year > maxYear || month > maxMonth && year == maxYear || day > maxDay && year == maxYear && month == maxMonth){
 	                		view.updateDate(maxYear, maxMonth, maxDay);
